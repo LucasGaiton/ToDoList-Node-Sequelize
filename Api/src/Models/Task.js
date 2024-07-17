@@ -1,6 +1,6 @@
-const {DataTypes} = require('sequelize');
-module.exports = (sequelize)=>{
-    sequelize.define("Task", {
+import {DataTypes} from 'sequelize';
+import sequelize from "../config/db.js";
+export const Task = sequelize.define("Task", {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -20,5 +20,3 @@ module.exports = (sequelize)=>{
             allowNull: false
         }
     })
-
-}
