@@ -11,11 +11,10 @@ export const getTasks= async (req, res) => {
 }
 export const addTask = async(req, res) =>{
     try {
-        const {content, dueDate} = req.body;
-        const newTask = Task.create({content: content, dueDate: dueDate})
+        const newTask = await Task.create(req.body)
         res.json(newTask);
-        
     } catch (error) {
+        console.log(error.message);
         
     }
 }
