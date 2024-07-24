@@ -141,16 +141,18 @@ function App() {
               </div>
             ) : (
               <>
-                <span onClick={() => toggleTaskCompletion(task.id, task.completed)}>
-                  {task.content} - Due: {new Date(task.dueDate).toLocaleDateString()}
-                </span>
+                <div className="task-content">
+                  <span onClick={() => toggleTaskCompletion(task.id, task.completed)}>
+                    {task.content}
+                  </span>
+                  <span className="due-date">{new Date(task.dueDate).toLocaleDateString()}</span>
+                </div>
                 <div className="task-actions">
                   <button onClick={() => startEditing(task)}>Edit</button>
                   <button onClick={() => deleteTask(task.id)}>Delete</button>
                 </div>
               </>
-            )
-            }
+            )}
           </li>
         ))}
       </ul>

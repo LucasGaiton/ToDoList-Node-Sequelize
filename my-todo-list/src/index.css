@@ -51,6 +51,12 @@ button:hover {
   background-color: #218838;
 }
 
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -77,22 +83,14 @@ li span {
   text-align: left;
 }
 
-li .task-actions {
-  display: flex;
-  align-items: center;
-}
-
-li .task-actions input[type="date"] {
-  margin-left: 0.5rem;
-}
-
-li button {
+li .task-actions button {
   background-color: #dc3545;
 }
 
-li button:hover {
+li .task-actions button:hover {
   background-color: #c82333;
 }
+
 
 .edit-form {
   display: flex;
@@ -133,4 +131,20 @@ li button:hover {
 
 .edit-form .cancel-button:hover {
   background-color: #5a6268;
+}
+.due-date {
+  padding: 0.2rem 0.5rem;
+  margin-left: 0.5rem;
+  background-color: #ffc107;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.task-content {
+  display: flex;
+  align-items: center;
+}
+.task-actions {
+  display: flex;
+  align-items: center;
 }
