@@ -3,6 +3,7 @@ import { Task } from "../Models/Task.js";
 export const getTasks = async (req, res) => {
     try {
         const tasks = await Task.findAll();
+        console.log("Entra a la perfeción");
         res.json(tasks)
     } catch (error) {
         console.log(error.message);
@@ -56,7 +57,7 @@ export const deleteTaskById = async (req,res) =>{
                 id: taskId
             }
         })
-        res.send("Se actualizo la tarea")
+        res.send("Se elimino la tarea")
     } catch (error) {
         res.status(500).send(error.message);
         
