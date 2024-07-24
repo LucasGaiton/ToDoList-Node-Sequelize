@@ -7,6 +7,9 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [newDueDate, setNewDueDate] = useState('');
+  const [editingTask, setEditingTask] = useState(null);
+  const [editText, setEditText] = useState('');
+  const [editDueDate, setEditDueDate] = useState('');
 
   // Función para obtener las tareas desde el backend
   const fetchTasks = async () => {
@@ -43,6 +46,33 @@ function App() {
       console.error('Error toggling task completion:', error);
     }
   };
+  // Función para comenzar a editar una tarea
+  const startEditing = (task) => {
+    setEditingTask(task.id);
+    setEditText(task.text);
+    setEditDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');
+  };
+  // Función para cancelar la edición de una tarea
+  const cancelEditing = () => {
+    setEditingTask(null);
+    setEditText('');
+    setEditDueDate('');
+  };
+  // Función para guardar la edición de una tarea
+  const saveEdit = async (id) => {
+    if (editText.trim() === '' || editDueDate.trim() === '') return;
+    try {
+      await axios.patch(`${API_URL}/${id}`, { text: editText, dueDate: editDueDate });
+      const updatedTasks = tasks.map(task =>
+        task.id === id ? { ...task, text: editText, dueDate: editDueDate } : task
+      );
+      setTasks(updatedTasks);
+      cancelEditing();
+    } catch (error) {
+      console.error('Error saving edit:', error);
+    }
+  };
+
 
   // Función para actualizar la fecha de caducidad de una tarea
   const updateDueDate = async (id, dueDate) => {
@@ -90,18 +120,37 @@ function App() {
         />
         <button onClick={addTask}>Add</button>
       </div>
+
       <ul>
         {tasks.map((task) => (
           <li key={task.id} className={task.completed ? 'completed' : ''}>
-            <span onClick={() => toggleTaskCompletion(task.id, task.completed)}>
-              {task.content} - Due: {new Date(task.dueDate).toLocaleDateString()}
-            </span>
-            {/* <input
-              type="date"
-              value={task.dueDate || ''}
-              onChange={(e) => updateDueDate(task.id, e.target.value)}
-            /> */}
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
+            {editingTask === task.id ? (
+              <div className="edit-form">
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+                <input
+                  type="date"
+                  value={editDueDate}
+                  onChange={(e) => setEditDueDate(e.target.value)}
+                />
+                <button className="save-button" onClick={() => saveEdit(task.id)}>Save</button>
+                <button className="cancel-button" onClick={cancelEditing}>Cancel</button>
+              </div>
+            ) : (
+              <>
+                <span onClick={() => toggleTaskCompletion(task.id, task.completed)}>
+                  {task.content} - Due: {new Date(task.dueDate).toLocaleDateString()}
+                </span>
+                <div className="task-actions">
+                  <button onClick={() => startEditing(task)}>Edit</button>
+                  <button onClick={() => deleteTask(task.id)}>Delete</button>
+                </div>
+              </>
+            )
+            }
           </li>
         ))}
       </ul>
