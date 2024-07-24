@@ -49,7 +49,7 @@ function App() {
   // Función para comenzar a editar una tarea
   const startEditing = (task) => {
     setEditingTask(task.id);
-    setEditText(task.text);
+    setEditText(task.content);
     setEditDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');
   };
   // Función para cancelar la edición de una tarea
@@ -62,9 +62,9 @@ function App() {
   const saveEdit = async (id) => {
     if (editText.trim() === '' || editDueDate.trim() === '') return;
     try {
-      await axios.patch(`${API_URL}/${id}`, { text: editText, dueDate: editDueDate });
+      await axios.put(`${API_URL}/${id}`, { content: editText, dueDate: editDueDate });
       const updatedTasks = tasks.map(task =>
-        task.id === id ? { ...task, text: editText, dueDate: editDueDate } : task
+        task.id === id ? { ...task, content: editText, dueDate: editDueDate } : task
       );
       setTasks(updatedTasks);
       cancelEditing();
