@@ -1,16 +1,20 @@
-import cron from 'node-cron';
-import { Task } from '../Models/Task';
+import {Op} from 'sequelize';
+import { Task } from '../Models/Task.js';
+import moment from 'moment-timezone';
 
 export async function updateExpiredTasks() {
-    const now = new Date();
+    // Convertir now a UTC
+    const now = moment().utc().toDate();
     try {
         // Encuentra todas las tareas cuya fecha de vencimiento ha pasado y que aún no están marcadas como vencidas
-        const tasks = Task.findAll({
+        const tasks = await Task.findAll({
             where: {
                 dueDate: { [Op.lt]: now }, // dueDate es menor que la fecha y hora actual
                 status: false
             }
         });
+        console.log("esto es la fecha actual " + now);
+        console.log("esto es tasks " + tasks);
         for (let task of tasks) {
             task.status = true;
             await task.save();
@@ -20,6 +24,5 @@ export async function updateExpiredTasks() {
     } catch (error) {
         console.error('Error updating tasks:', error);
     }
-    
+
 }
-cron.schedule("* * * * *", updateExpiredTasks)
