@@ -46,18 +46,21 @@ function App() {
       console.error('Error toggling task completion:', error);
     }
   };
+
   // Función para comenzar a editar una tarea
   const startEditing = (task) => {
     setEditingTask(task.id);
     setEditText(task.content);
     setEditDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');
   };
+
   // Función para cancelar la edición de una tarea
   const cancelEditing = () => {
     setEditingTask(null);
     setEditText('');
     setEditDueDate('');
   };
+
   // Función para guardar la edición de una tarea
   const saveEdit = async (id) => {
     if (editText.trim() === '' || editDueDate.trim() === '') return;
@@ -70,20 +73,6 @@ function App() {
       cancelEditing();
     } catch (error) {
       console.error('Error saving edit:', error);
-    }
-  };
-
-
-  // Función para actualizar la fecha de caducidad de una tarea
-  const updateDueDate = async (id, dueDate) => {
-    try {
-      await axios.put(`${API_URL}/${id}`, { dueDate });
-      const updatedTasks = tasks.map(task =>
-        task.id === id ? { ...task, dueDate } : task
-      );
-      setTasks(updatedTasks);
-    } catch (error) {
-      console.error('Error updating due date:', error);
     }
   };
 
@@ -145,11 +134,11 @@ function App() {
                   <span onClick={() => toggleTaskCompletion(task.id, task.completed)}>
                     {task.content}
                   </span>
-                  <span className="due-date">{new Date(task.dueDate).toLocaleDateString()}</span>
+                  <span className="due-date">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
                 </div>
                 <div className="task-actions">
-                  <button onClick={() => startEditing(task)}>Edit</button>
-                  <button onClick={() => deleteTask(task.id)}>Delete</button>
+                  <button className="edit-button" onClick={() => startEditing(task)}>Edit</button>
+                  <button className="delete-button" onClick={() => deleteTask(task.id)}>Delete</button>
                 </div>
               </>
             )}
