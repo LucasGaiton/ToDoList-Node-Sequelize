@@ -35,8 +35,6 @@ export const getTasKById = async (req, res) => {
 export const putTaskById = async (req, res) => {
     try {
         const taskId = req.params.id;
-        console.log(taskId);
-        console.log("aca esta la wea",req.body);
         await Task.update(req.body, {
             where: {
                 id: taskId
@@ -51,7 +49,6 @@ export const putTaskById = async (req, res) => {
 export const deleteTaskById = async (req,res) =>{
     try {
         const taskId = req.params.id;
-        console.log(taskId);
         await Task.destroy({
             where: {
                 id: taskId

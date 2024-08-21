@@ -111,8 +111,11 @@ function App() {
       </div>
 
       <ul>
-        {tasks.map((task) => (
-          <li key={task.id} className={task.completed ? 'completed' : ''}>
+        {tasks.map(function(task){
+          let date = new Date(task.dueDate)
+          date.setDate(date.getDate() + 1);
+          return(
+            <li key={task.id} className={task.completed ? 'completed' : ''}>
             {editingTask === task.id ? (
               <div className="edit-form">
                 <input
@@ -134,7 +137,7 @@ function App() {
                   <span onClick={() => toggleTaskCompletion(task.id, task.completed)}>
                     {task.content}
                   </span>
-                  <span className="due-date">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                  <span className="due-date">Due: {date.toLocaleDateString()}</span>
                 </div>
                 <div className="task-actions">
                   <button className="edit-button" onClick={() => startEditing(task)}>Edit</button>
@@ -143,7 +146,10 @@ function App() {
               </>
             )}
           </li>
-        ))}
+          )
+        }
+          
+        )}
       </ul>
     </div>
   );
