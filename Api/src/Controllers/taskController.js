@@ -1,3 +1,4 @@
+import { where } from "sequelize";
 import { Task } from "../Models/Task.js";
 
 export const getTasks = async (req, res) => {
@@ -7,7 +8,19 @@ export const getTasks = async (req, res) => {
         res.json(tasks)
     } catch (error) {
         console.log(error.message);
-
+    }
+}
+export const getDuetasks = async (req, res) =>{
+    try {
+        const tasks = await Task.findAll({
+            where : {
+            status : true
+        }});
+        res.json(tasks)
+    } catch (error) {
+        console.log(error.message);
+        
+        
     }
 }
 export const addTask = async (req, res) => {
